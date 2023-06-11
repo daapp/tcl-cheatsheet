@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TCL cheatsheet</title>
+    <style>
+     .where {
+       padding-left: 3em;
+       font-size: 5px;
+     }
+     .where > ul {
+       margin: 0em;
+     }
+
+     .tooltip {
+       position: relative;
+       display: inline-block;
+       border-bottom: 2px dotted red;
+     }
+
+     .tooltiptext {
+       visibility: hidden;
+       background-color: yellow;
+       color: black;
+       border-radius: 6px;
+       border: 1px solid black;
+       padding: 5px;
+       position: absolute;
+       z-index: 1;
+     }
+
+     code > i > .tooltip:hover + .tooltiptext {
+       visibility: visible;
+     }
+    </style>
+    <script>
+     function showTooltip(name) {
+       var i = document.getElementById(name);
+       i.style.visibility='visible';
+       i.onclick = function(){ i.style.visibility='hidden';}
+       i.onmouseleave = function(){ i.style.visibility='hidden';}
+     }
+
+     function onload() {
+       var tooltips = document.getElementsByClassName("tooltip");
+       var tooltiptexts = document.getElementsByClassName("tooltiptext");
+       if (tooltips.length != tooltiptexts.length) {
+         console.log("# tooltip != # tooltiptext")
+       } else {
+         for(var i = 0; i < tooltips.length; i++) {
+           console.log(tooltips[i], tooltiptexts[i].id);
+           tooltips[i].tooltiptext = tooltiptexts[i].id;
+           tooltips[i].onmouseover = function(e) {
+             showTooltip(e.currentTarget.tooltiptext)
+           };
+
+         }
+       }
+     }
+    </script>
+  </head>
+  <body onload="onload();">
+    <header>
+      <h1>TCL cheatsheet</h1>
+    </header>
+    <nav>
+      <h2>Table of Contents</h2>
+      <div id="text-table-of-contents" role="doc-toc">
+        <ul>
+          <li><a href="#org5b31c08">Syntax</a></li>
+          <li><a href="#org90d51f2">Data structures</a>
+            <ul>
+              <li><a href="#orgf280142">Predefined variables</a></li>
+              <li><a href="#orgc52ff1a">Predefined channels</a></li>
+            </ul>
+          </li>
+          <li><a href="#org8c2f924">Commands</a>
+            <p>
+              <a href="#orgdfd1dd7">a</a>
+              <a href="#org4b14e52">b</a>
+              <a href="#orgbc752c2">c</a>
+              <a href="#orgcc285f4">d</a>
+              <a href="#org5d78f90">e</a>
+              <a href="#orga07ca24">f</a>
+              <a href="#org1c938b6">g</a>
+              <a href="#org567f1cb">i</a>
+              <a href="#org990b50a">j</a>
+              <a href="#orgc9d11f0">l</a>
+              <a href="#org030f75d">n</a>
+              <a href="#org3bea7c7">o</a>
+              <a href="#org9c1a3dc">p</a>
+              <a href="#org4b7c126">r</a>
+              <a href="#org3188cf3">s</a>
+              <a href="#org28eab88">t</a>
+              <a href="#org06be1bd">u</a>
+              <a href="#org771cecf">v</a>
+              <a href="#orge65c5e9">w</a>
+              <a href="#org464d8cb">y</a>
+              <a href="#org974090f">z</a>
+            </p>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <section>
+      <h2>Syntax</h2>
+      <ol>
+        <li>Commands</li>
+        <li>Evaluation</li>
+        <li>Words</li>
+        <li>Double quotes</li>
+        <li>Argument expansion</li>
+        <li>Braces</li>
+        <li>Command substitution</li>
+        <li>Variable substitution
+          <ul class="org-ul">
+            <li>$name</li>
+            <li>$name(index)</li>
+            <li>${name}</li>
+          </ul></li>
+        <li>Backslash substitution</li>
+        <li>Comments</li>
+        <li>Order of execution</li>
+        <li>Substitution and word boundaries</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Data structures</h2>
+      <div>
+        <ul>
+          <li>Scalar variable</li>
+          <li>List</li>
+          <li>Array</li>
+          <li>Dictionary</li>
+        </ul>
+      </div>
+
+      <h3>Predefined variables</h3>
+      <div>
+        <ul>
+          <li>argc</li>
+          <li>argv</li>
+          <li>argv0</li>
+          <li>auto_path</li>
+          <li>env</li>
+          <li>errorCode</li>
+          <li>errorInfo</li>
+          <li>tcl_interactive</li>
+          <li>tcl_library</li>
+          <li>tcl_nonwordchars</li>
+          <li>tcl_patchLevel</li>
+          <li>tcl_pkgPath</li>
+          <li>tcl_platform</li>
+          <li>tcl_precision</li>
+          <li>tcl_rcFileName</li>
+          <li>tcl_traceCompile</li>
+          <li>tcl_traceExec</li>
+          <li>tcl_wordchars</li>
+          <li>tcl_version</li>
+        </ul>
+      </div>
+
+      <h3>Predefined channels</h3>
+      <div>
+        <ul>
+          <li>stdin</li>
+          <li>stdout</li>
+          <li>stderr</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Commands</h2>
+
+      <h3>Convensions:</h3>
+      <dl>
+        <dt>ms</dt>
+        <dd>milliseconds</dd>
+        <dt>pattern</dt>
+        <dd>see description of <b>string match</b></dd>
+      </dl>
+
+      <h3>a</h3>
+
+      <code>after <i>ms</i></code><br>
+      <code>after <i>ms</i> <i>script</i> …</code><br>
+      <code>after cancel <i>id</i></code><br>
+      <code>after cancel <i>script</i> …</code><br>
+      <code>after idle <i>?script …?</i></code><br>
+      <code>after info <i>?id?</i></code><br>
+      <br>
+      <code>append <i>varName</i> <i>?value …?</i></code><br>
+      <br>
+      <div>
+        <code>apply <i><span class="tooltip">func</span></i> <i>?arg1 arg2 …?</i></code>
+        <div class="tooltiptext" id="apply">where <i>func</i> one of:
+          <ul>
+            <li>{<i>args body</i>}</li>
+            <li>{<i>args body namespace</i>}</li>
+          </ul>
+        </div>
+      </div>
+      <br>
+
+      <code>array anymore <i>arrayName</i> <i>searchId</i></code><br>
+      <code>array donesearch <i>arrayName</i> <i>searchId</i></code><br>
+      <code>array exists <i>arrayName</i></code><br>
+      <code>array get <i>arrayName</i> <i>?pattern?</i></code><br>
+      <code>array names <i>arrayName</i> <i>?mode?</i> <i>?pattern?</i></code><br>
+      <code>array nextelement <i>arrayName</i> <i>searchId</i></code><br>
+      <code>array set <i>arrayName</i> <i>list</i></code><br>
+      <code>array size <i>arrayName</i></code><br>
+      <code>array startsearch <i>arrayName</i></code><br>
+      <code>array statistics <i>arrayName</i></code><br>
+      <code>array unset <i>arrayName</i> <i>?pattern?</i></code>
+    </section>
+
+    <section>
+      <h3>b</h3>
+
+      <code>binary decode <i>format</i> <i>?-option value …?</i> <i>data</i></code><br>
+      <code>binary encode <i>format</i> <i>?-option value …</i> <i>data</i></code><br>
+      <code>binary format <i>formatString</i> <i>?arg …?</i></code><br>
+      <code>binary scan <i>string</i> <i>formatString</i> <i>?varName …?</i></code><br>
+      <br>
+      <code>break</code>
+    </section>
+
+    <section>
+      <h3>c</h3>
+
+      <code>catch <i>script</i> <i>?resultVarName?</i> <i>?optionsVarName?</i></code><br>
+      <br>
+      <code>cd <i>?dirName?</i></code><br>
+      <br>
+      <code>chan blocked <i>channelId</i></code><br>
+      <code>chan close <i>channelId</i> <i>?direction?</i></code><br>
+      <div>
+        <code>chan configure <i>channelId</i> <i>?<span class="tooltip">-option</span>?</i> <i>value</i> …</code><br>
+        <div class="tooltiptext" id="chan-configure">where <i>-option</i>:
+          <ul>
+            <li><code>-blocking <i>boolean</i></code></li>
+            <li>
+              <div>
+                <code>-buffering <i>newValue</i></code>
+                <div class="where">where <i>newValue</i> is one of: <b>full</b>, <b>line</b> or <b>none</b>
+                </div>
+              </div>
+            </li>
+            <li><code>-buffersize <i>newSize</i></code></li>
+            <li><code>-encoding <i>name</i></code></li>
+            <li><code>-eofchar <i>char</i></code></li>
+            <li><code>-eofchar <i>{inChar outChar}</i></code></li>
+            <li>
+              <div>
+                <code>-translation <i>mode</i></code>code>
+                <div class="where">where <i>mode</i> is one of: <b>auto</b>, <b>binary</b>, <b>cr</b>, <b>crlf</b> or <b>lf</b>
+                </div>
+              </div>
+            </li>
+            <li><code>-translation {<i>inMode outMode</i>}</code></li>
+          </ul>
+        </div>
+      </div>
+      <code>chan copy <i>inputChan</i> <i>outputChan</i> ?-size <i>size</i>? ?-command <i>callback</i>?</code><br>
+      <code>chan create <i>mode</i> <i>cmdPrefix</i></code><br>
+      <code>chan eof <i>channelId</i></code><br>
+      <div>
+        <code>chan event <i>channelId</i> <i><span class="tooltip">event</span></i> <i>?script?</i></code>
+        <div class="tooltiptext" id="chan-eof">
+          where <i>event</i> if one of: <b>readable</b> or <b>writable</b>
+        </div>
+      </div>
+      <code>chan flush <i>channelId</i></code><br>
+      <code>chan gets <i>channelId</i> <i>?varName?</i></code><br>
+      <code>chan names <i>channelId</i> <i>?pattern?</i></code><br>
+      <div>
+        <code>chan pending <i><span class="tooltip">mode</span></i> <i>channelId</i></code><br>
+        <div class="tooltiptext" id="chan-names">
+          where <i>mode</i> is one of: <b>input</b> or <b>output</b>
+        </div>
+      </div>
+      <code>chan pipe</code><br>
+      <code>chan pop <i>channelId</i></code><br>
+      <div>
+        <code>chan postevent <i>channelId</i> <i><span class="tooltip">eventSpec</span></i></code><br>
+        <div class="tooltiptext" id="chan-postevent">where <i>eventSpec</i> is a list containing any of strings <b>read</b> or <b>write</b>.
+        </div>
+      </div>
+      <code>chan push <i>channelId</i> <i>cmdPrefix</i></code><br>
+      <code>chan puts <i>?-nonewline?</i> <i>?channelId?</i> <i>string</i></code><br>
+      <code>chan read <i>channelId</i> <i>?numChars?</i></code><br>
+      <code>chan read <i>?-nonewline?</i> <i>channelId</i></code><br>
+      <div>
+        <code>chan seek <i>channelId</i> <i>offset</i> <i>?<span class="tooltip">origin</span>?</i></code><br>
+        <div class="tooltiptext" id="chan-seek">where <i>origin</i> must be one of: <b>start</b>, <b>current</b> or <b>end</b>. Default is <b>start</b>.
+        </div>
+      </div>
+      <code>chan tell <i>channelId</i></code><br>
+      <code>chan truncate <i>channelId</i> <i>?length?</i></code><br>
+      <br>
+      <div>
+        <code>clock add <i>timeVal</i> <i>?count unit …?</i> <i>?<span class="tooltip">-option</span> value?</i></code><br>
+        <div class="tooltiptext" id="clock-add">where <i>-option</i>:
+          <ul>
+            <li><b>-gmt</b> <i>boolean</i></li>
+            <li><b>-timezone</b> <i>zoneName</i></li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <code>clock clicks <i>?<span class="tooltip">-option</span>?</i></code><br>
+        <div class="tooltiptext" id="clock-clicks">where <i>-option</i> is one of: <b>-milliseconds</b> or <b>-microseconds</b>
+        </div>
+      </div>
+      <div>
+        <code>clock format <i>timeVal</i> <i>?<span class="tooltip">-option</span> value …?</i></code><br>
+        <div class="tooltiptext" id="clock-format">where <i>-option</i>:
+          <ul>
+            <li><b>-format</b> <i>format</i></li>
+            <li><b>-gmt</b> <i>boolean</i></li>
+            <li><b>-locale</b> <i>localeName</i></li>
+            <li><b>-timezone</b> <i>zoneName</i></li>
+          </ul>
+        </div>
+      </div>
+      <code>clock microseconds</code><br>
+      <code>clock milliseconds</code><br>
+      <div>
+        <code>clock scan <i>inputString</i> <i>?<span class="tooltip">-option</span> value …?</i></code><br>
+        <div class="tooltiptext" id="clock-scan">where <i>-option</i>:
+          <ul>
+            <li><b>-base</b> <i>time</i></li>
+            <li><b>-format</b> <i>format</i></li>
+            <li><b>-gmt</b> <i>boolean</i></li>
+            <li><b>-locale</b> <i>localeName</i></li>
+            <li><b>-timezone</b> <i>zoneName</i></li>
+          </ul>
+        </div>
+      </div>
+      <code>clock seconds</code><br>
+      <br>
+      <div>
+        <code>close <i>channelId</i> <i>?<scan class="tooltip">mode</scan>?</i></code>
+        <div class="tooltiptext" id="close">
+          where <i>mode</i> is one of: <b>r</b>, <b>read</b>, <b>w</b> or <b>write</b>.
+        </div>
+      </div>
+      <br>
+      <code>concat <i>?arg …?</i></code><br>
+      <br>
+      <code>continue</code><br>
+      <br>
+      <code>coroutine <i>name</i> <i>command</i> <i>?arg …?</i></code><br>
+    </section>
+
+    <section>
+      <h3>d</h3>
+
+      <code>dict append <i>dictionaryVariable</i> <i>key</i> <i>?string …?</i></code><br>
+      <code>dict create <i>?key value …?</i></code><br>
+      <code>dict exists <i>dictionaryValue</i> <i>key</i> <i>?key …?</i></code><br>
+      <code>dict filter <i>dictionaryValue</i> key <i>?globPattern …?</i></code><br>
+      <code>dict filter <i>dictionaryValue</i> script {<i>keyVariable valueVariable</i>} <i>script</i></code><br>
+      <code>dict filter <i>dictionaryValue</i> value <i>?globPattern …?</i></code><br>
+      <code>dict for {<i>keyVariable valueVariable</i>} <i>dictionaryValue</i> <i>body</i></code><br>
+      <code>dict get <i>dictionaryValue</i> <i>?key …?</i></code><br>
+      <code>dict incr <i>dictionaryVariable</i> <i>key</i> <i>?increment?</i></code><br>
+      <code>dict info <i>dictionaryValue</i></code><br>
+      <code>dict keys <i>dictionaryValue</i> <i>?globPattern?</i></code><br>
+      <code>dict lappend <i>dictionaryVariable</i> <i>key</i> <i>?value?</i></code><br>
+      <code>dict map {<i>keyVariable valueVariable</i>} <i>dictionaryValue</i> <i>body</i></code><br>
+      <code>dict merge <i>?dictionaryValue …?</i></code><br>
+      <code>dict remove <i>dictionaryValue</i> <i>?key …?</i></code><br>
+      <code>dict replace <i>dictionaryValue</i> <i>?key value …?</i></code><br>
+      <code>dict set <i>dictionaryVariable</i> <i>key</i> <i>?key …?</i> <i>value</i></code><br>
+      <code>dict size <i>dictionaryValue</i></code><br>
+      <code>dict unset <i>dictionaryVariable</i> <i>key</i> <i>?key …?</i></code><br>
+      <code>dict update <i>dictionaryVariable</i> <i>key</i> <i>varName</i> <i>?key varName …?</i> <i>body</i></code><br>
+      <code>dict values <i>dictionaryValue</i> <i>?globPattern?</i></code><br>
+      <code>dict with <i>dictionaryVariable</i> <i>?key …?</i> <i>body</i></code><br>
+    </section>
+
+    <section>
+      <h3>e</h3>
+
+      <code>encoding convertfrom <i>?encoding?</i> <i>data</i></code><br>
+      <code>encoding convertto</code> <i>?encoding?</i> <i>string</i></code><br>
+      <code>encoding dirs <i>?directoryList?</i></code><br>
+      <code>encoding names</code><br>
+      <code>encoding system <i>?encoding?</i></code><br>
+      <br>
+      <code>eof <i>channelId</i></code><br>
+      <br>
+      <code>error <i>message</i> <i>?info?</i> <i>?code?</i></code><br>
+      <br>
+      <code>eval <i>arg</i> <i>?arg …?</i></code><br>
+      <br>
+      <div>
+        <code>exec <i>?<span class="tooltip">switches</span>?</i> <i>arg</i> <i>?arg …?</i> ?&amp;?</code><br>
+        <div class="tooltiptext" id="exec">where <i>switch</i>:
+          <ul>
+            <li><b>-ignorestderr</b></li>
+            <li><b>-keepnewline</b></li>
+            <li><b>--</b></li>
+          </ul>
+        </div>
+      </div>
+      <br>
+      <code>exit <i>?returnCode?</i></code><br>
+      <br>
+
+      <code>expr <i>arg</i> <i>?arg arg …?</i></code><br>
+      <br>
+
+    </section>
+
+    <section>
+      <h3>f</h3>
+      <code>fblocked <i>channelId</i></code><br>
+      <br>
+      <code>fconfigure <i>channelId</i></code><br>
+      <code>fconfigure <i>channelId</i> <i>name</i></code><br>
+      <code>fconfigure <i>channelId</i> <i>name</i> <i>value</i> <i>?name value …?</i></code><br>
+      <br>
+
+      <code>fcopy <i>inChan</i> <i>outChan</i> ?-size <i>size</i>? ?-command <i>callback</i>?</code><br>
+      <br>
+      <code>file atime <i>name</i> <i>?time?</i></code><br>
+      <code>file attributes <i>name</i></code><br>
+      <code>file attributes <i>name</i> <i>?option?</i></code><br>
+      <code>file attributes <i>name</i> <i>?option value …?</i></code><br>
+      <code>file channels <i>?pattern?</i></code><br>
+      <code>file copy ?-force? ?–? <i>source</i> <i>target</i></code><br>
+      <code>file copy ?-force? ?–? <i>source</i> <i>?source …?</i> <i>targetDir</i></code><br>
+      <code>file delete ?-force? ?–? <i>?pathname …?</i></code><br>
+      <code>file dirname <i>name</i></code><br>
+      <code>file executable <i>name</i></code><br>
+      <code>file exists <i>name</i></code><br>
+      <code>file extension <i>name</i></code><br>
+      <code>file isdirectory <i>name</i></code><br>
+      <code>file isfile <i>name</i></code><br>
+      <code>file join <i>name</i> <i>?name …?</i></code><br>
+      <div>
+        <code>file link <i>?<span class="tooltip">linkType</span>?</i> <i>linkName</i> <i>?target?</i></code><br>
+        <div class="tooltiptext" id="file-link">where <i>linkType</i> is one of <b>-symbolic</b> or <b>-hard</b>
+        </div>
+      </div>
+      <code>file lstat <i>name</i> <i>varName</i></code><br>
+      <code>file mkdir <i>?dir …?</i></code><br>
+      <code>file mtime <i>name</i> <i>?time?</i></code><br>
+      <code>file nativename <i>name</i></code><br>
+      <code>file normalize <i>name</i></code><br>
+      <code>file owned <i>name</i></code><br>
+      <code>file pathtype <i>name</i></code><br>
+      <code>file readable <i>name</i></code><br>
+      <code>file readlink <i>name</i></code><br>
+      <code>file rename ?-force? ?–? <i>source</i> <i>target</i></code><br>
+      <code>file rename ?-force? ?–? <i>source</i> <i>?source …?</i> <i>targetDir</i></code><br>
+      <code>file rootname <i>name</i></code><br>
+      <code>file separator <i>?name?</i></code><br>
+      <code>file size <i>name</i></code><br>
+      <code>file split <i>name</i></code><br>
+      <code>file stat <i>name</i> <i>varName</i></code><br>
+      <code>file system <i>name</i></code><br>
+      <code>file tail <i>name</i></code><br>
+      <code>file tempfile <i>?varName?</i> <i>?template?</i></code><br>
+      <code>file type <i>name</i></code><br>
+      <code>file volumes</code><br>
+      <code>file writable <i>name</i></code><br>
+      <br>
+      <code>fileevent <i>channelId</i> readable <i>?script?</i></code><br>
+      <code>fileevent <i>channelId</i> writable <i>?script?</i></code><br>
+      <br>
+      <code>flush <i>channelId</i></code><br>
+      <br>
+      <code>for <i>start</i> <i>test</i> <i>next</i> <i>body</i></code><br>
+      <br>
+      <code>foreach <i>varName</i> <i>list</i> <i>body</i></code><br>
+      <code>foreach <i>varList1</i> <i>list1</i> <i>?varList2 list2 …?</i> <i>body</i></code><br>
+      <br>
+      <code>format <i>formatString</i> <i>?arg …?</i></code><br>
+    </section>
+
+    <section>
+      <h3>g</h3>
+      <code>gets <i>channelId</i> <i>?varName?</i></code><br>
+      <br>
+      <code>glob <i>?switches?</i> <i>?pattern …?</i></code><br>
+      <br>
+      <code>global <i>?varName …?</i></code><br>
+    </section>
+
+    <section>
+      <h3>i</h3>
+      <code>if <i>expr1</i> ?then? <i>body1</i></code><br>
+      <code>if <i>expr1</i> ?then? <i>body1</i> ?else? <i>body2</i></code><br>
+      <code>if <i>expr1</i> ?then? <i>body1</i> elseif <i>expr2</i> ?then? <i>body2</i></code><br>
+      <code>if <i>expr1</i> ?then? <i>body1</i> elseif <i>expr2</i> ?then? <i>body2</i> ?else? <i>body3</i></code><br>
+      <br>
+      <code>incr <i>varName</i> <i>?increment?</i></code><br>
+      <br>
+      <code>info args <i>procName</i></code><br>
+      <code>info body <i>procName</i></code><br>
+      <code>info class call <i>class</i> <i>method</i></code><br>
+      <code>info class constructor <i>class</i></code><br>
+      <code>info class definition <i>class</i> <i>method</i></code><br>
+      <code>info class destructor <i>class</i></code><br>
+      <code>info class filters <i>class</i></code><br>
+      <code>info class forward <i>class</i> <i>method</i></code><br>
+      <code>info class instances <i>class</i> <i>?pattern?</i></code><br>
+      <code>info class methods <i>class</i> <i>?option …?</i></code><br>
+      <code>info class methodtype <i>class</i> <i>method</i></code><br>
+      <code>info class mixins <i>class</i></code><br>
+      <code>info class subclasses <i>class</i> <i>?pattern?</i></code><br>
+      <code>info class superclass <i>class</i></code><br>
+      <code>info class variables <i>class</i></code><br>
+      <code>info cmdcount</code><br>
+      <code>info commands <i>?pattern?</i></code><br>
+      <code>info complete <i>command</i></code><br>
+      <code>info coroutine</code><br>
+      <code>info default <i>procName</i> <i>arg</i> <i>varName</i></code><br>
+      <code>info errorstack <i>?interp?</i></code><br>
+      <code>info exists <i>varName</i></code><br>
+      <code>info frame <i>?number?</i></code><br>
+      <code>info functions <i>?pattern?</i></code><br>
+      <code>info globals <i>?pattern?</i></code><br>
+      <code>info hostname</code><br>
+      <code>info level <i>?number?</i></code><br>
+      <code>info library</code><br>
+      <code>info loaded <i>?interp?</i></code><br>
+      <code>info locals <i>?pattern?</i></code><br>
+      <code>info nameofexecutable</code><br>
+      <code>info object call <i>object</i> <i>method</i></code><br>
+      <code>info object class <i>object</i> <i>?className?</i></code><br>
+      <code>info object definition <i>object</i> <i>method</i></code><br>
+      <code>info object filters <i>object</i></code><br>
+      <code>info object forward <i>object</i> <i>method</i></code><br>
+      <code>info object isa class <i>object</i></code><br>
+      <code>info object isa metaclass <i>object</i></code><br>
+      <code>info object isa mixin <i>object</i> <i>class</i></code><br>
+      <code>info object isa object <i>object</i></code><br>
+      <code>info object isa typeof <i>object</i> <i>class</i></code><br>
+      <div>
+        <code>info object methods <i>object</i> <i>?<span class="tooltip">options</span>?</i></code><br>
+        <div class="tooltiptext" id="info-object-method">where <i>option</i> can be <b>-all</b> or <b>-private</b>.<br>
+        </div>
+      </div>
+      <code>info object methodtype <i>object</i> <i>method</i></code><br>
+      <code>info object mixins <i>object</i></code><br>
+      <code>info object namespace <i>object</i></code><br>
+      <code>info object variables <i>object</i></code><br>
+      <code>info object vars <i>object</i> <i>?pattern?</i></code><br>
+      <code>info patchLevel</code><br>
+      <code>info procs <i>?pattern?</i></code><br>
+      <code>info script <i>?fileName?</i></code><br>
+      <code>info sharedlibextension</code><br>
+      <code>info tclversion</code><br>
+      <code>info vars <i>?pattern?</i></code><br>
+      <br>
+      <code>interp alias <i>srcPath</i> <i>srcToken</i></code><br>
+      <code>interp alias <i>srcPath</i> <i>srcToken</i> {}</code><br>
+      <code>interp alias <i>srcPath</i> <i>srcCmd</i> <i>targetPath</i> <i>targetCmd</i> <i>?arg …?</i></code><br>
+      <code>interp aliases <i>?path?</i></code><br>
+      <code>interp bgerror <i>path</i> <i>?cmdPrefix?</i></code><br>
+      <code>interp calcel ?-unwind? ?--? <i>?path?</i> <i>?result?</i></code><br>
+      <code>interp create ?-safe? ?--? <i>?path?</i></code><br>
+      <code>interp debug <i>path</i> ?-frame <i>?bool?</i>?</code><br>
+      <code>interp delete <i>?path …?</i></code><br>
+      <code>interp eval <i>path</i> <i>arg</i> <i>?arg …?</i></code><br>
+      <code>interp exists <i>path</i></code><br>
+      <code>interp expose <i>path</i> <i>hiddenName</i> <i>?exposedCmdName?</i></code><br>
+      <code>interp hide <i>path</i> <i>exposedCmdName</i> <i>?hiddenCmdName?</i></code><br>
+      <code>interp hidden <i>path</i></code><br>
+      <code>interp invokehidden <i>path</i> <i>?-option …?</i> <i>hiddenCmdName</i> <i>?arg …?</i></code><br>
+      <code>interp issafe <i>?path?</i></code><br>
+      <code>interp limit <i>path</i> <i>limitType</i> <i>?-option?</i> <i>?value …?</i></code><br>
+      <code>interp marktrusted <i>path</i></code><br>
+      <code>interp recursionlimit <i>path</i> <i>?newLimit?</i></code><br>
+      <code>interp share <i>srcPath</i> <i>channelId</i> <i>destPath</i></code><br>
+      <code>interp slaves <i>?path?</i></code><br>
+      <code>interp children <i>?path?</i></code><br>
+      <code>interp target <i>path</i> <i>alias</i></code><br>
+      <code>interp target <i>path</i> <i>alias</i></code><br>
+      <code>interp transfer <i>srcPath</i> <i>channelId</i> <i>destPath</i></code><br>
+    </section>
+
+    <section>
+      <h3>j</h3>
+
+      <code>join <i>list</i> <i>?joinString?</i></code>
+    </section>
+
+    <section>
+      <h3>l</h3>
+      <code>lassign <i>list</i> <i>?varName …?</i></code><br>
+      <br>
+      <code>lindex <i>list</i> <i>index</i> <i>?element …?</i></code><br>
+      <br>
+      <code>list <i>?arg …?</i></code><br>
+      <br>
+      <code>llength <i>list</i></code><br>
+      <br>
+      <code>lmap <i>varName</i> <i>list</i> <i>body</i></code><br>
+      <code>lmap</code> <i>varList1</i> <i>list1</i> <i>?varList2 list2 …?</i> <i>body</i><br>
+      <br>
+      <code>load ?-global? ?-lazy? ?--? <i>fileName</i></code><br>
+      <code>load ?-global? ?-lazy? ?--? <i>fileName</i> <i>prefix</i></code><br>
+      <code>load ?-global? ?-lazy? ?--? <i>fileName</i> <i>prefix</i> <i>interp</i></code><br>
+      <br>
+      <code>lrange <i>list</i> <i>first</i> <i>last</i></code><br>
+      <br>
+      <code>lrepeat <i>count</i> <i>?element …?</i></code><br>
+      <br>
+      <code>lreplace <i>list</i> <i>first</i> <i>last</i> <i>?element …?</i></code><br>
+      <br>
+      <code>lreverse <i>list</i></code><br>
+      <br>
+      <div>
+        <code>lsearch <i>?<span class="tooltip">options</span>?</i> <i>list</i> <i>pattern</i></code><br>
+        <div class="tooltiptext" id="lsearch">
+          Matching style options: <b>-exact</b>, <b>-glob</b>, <b>-regexp</b>, <b>-sorted</b>.<br>
+
+          General options: <b>-all</b>, <b>-inline</b>, <b>-not</b>, <b>-start</b> <i>index</i>.<br>
+          Content options: <b>-ascii</b>, <b>-dictionary</b>, <b>-integer</b>, <b>-nocase</b>, <b>-real</b><br>
+          Sorted list options: <b>-decreasing</b>, <b>-increasing</b>, <b>-bisect</b><br>
+          Nested list options: <b>-index</b> <i>indexList</i>, <b>-subindices</b>.
+        </div>
+      </div>
+      <br>
+      <code>lset <i>varName</i> <i>?index …?</i> <i>newValue</i></code><br>
+      <br>
+
+      <div>
+        <code>lsort <i>?<span class="tooltip">options</span>?</i> <i>list</i></code><br>
+        <div class="tooltiptext" id="lsort">where <i>option</i> is: <b>-ascii</b>, <b>-dictionary</b>,
+          <b>-integer</b>, <b>-real</b>, <b>-command</b> <i>command</i>,
+          <b>-increasing</b>, <b>-decreasing</b>, <b>-indices</b>,
+          <b>-index</b> <i>indexList</i>, <b>-stride</b> <i>strideLength</i>,
+          <b>-nocase</b>, <b>-unique</b>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>n</h3>
+      <code>namespace children <i>?namespace?</i> <i>?pattern?</i></code><br>
+      <code>namespace code <i>script</i></code><br>
+      <code>namespace current</code><br>
+      <code>namespace delete <i>?namespace …?</i></code><br>
+      <code>namespace ensemble create <i>?option value …?</i></code><br>
+      <code>namespace ensemble configure <i>command</i> <i>?option?</i> <i>?value …?</i></code><br>
+      <code>namespace ensemble exists <i>command</i></code><br>
+      <code>namespace eval <i>namespace</i> <i>arg</i> <i>?arg …?</i></code><br>
+      <code>namespace exists <i>namespace</i></code><br>
+      <code>namespace export ?-clear? <i>?pattern …?</i></code><br>
+      <code>namespace forget <i>?pattern …?</i></code><br>
+      <code>namespace import ?-force? <i>?pattern …?</i></code><br>
+      <code>namespace inscope <i>namespace</i> <i>script</i> <i>?arg …?</i></code><br>
+      <code>namespace origin <i>command</i></code><br>
+      <code>namespace parent <i>?namespace?</i></code><br>
+      <code>namespace path <i>?namespaceList?</i></code><br>
+      <code>namespace qualifiers <i>string</i></code><br>
+      <code>namespace tail <i>string</i></code><br>
+      <code>namespace upvar <i>namespace</i> <i>?otherVar myVar …?</i></code><br>
+      <code>namespace unknown <i>?script?</i></code><br>
+      <code>namespace which ?-command? ?-variable? <i>name</i></code><br>
+    </section>
+
+    <section>
+      <h3>o</h3>
+      <code>open <i>fileName</i></code><br>
+      <code>open <i>fileName</i> <i>access</i></code><br>
+      <code>open <i>fileName</i> <i>access</i> <i>premissions</i></code><br>
+    </section>
+
+    <section>
+      <h3>p</h3>
+      <code>package forget <i>?package …?</i></code><br>
+      <code>package ifneeded <i>package /version</i> <i>?script?</i></code><br>
+      <code>package names</code><br>
+      <code>package present <i>package</i> <i>?requirement …?</i></code><br>
+      <code>package present -exact <i>package</i> <i>version</i></code><br>
+      <code>package provide <i>package</i> <i>?version?</i></code><br>
+      <code>package require <i>package</i> <i>?version?</i></code><br>
+      <code>package require -exact <i>package</i> <i>version</i></code><br>
+      <code>package unknown <i>?command?</i></code><br>
+      <code>package vcompare <i>version1</i> <i>version2</i></code><br>
+      <code>package versions <i>package</i></code><br>
+      <code>package vsatisfies <i>version /requirement …</i></code><br>
+      <code>package prefer ?latest|stable?</code><br>
+      <br>
+      <code>pid <i>?fileId?</i></code><br>
+      <br>
+      <code>proc <i>name</i> <i>args</i> <i>body</i></code><br>
+      <br>
+      <code>puts ?-nonewline? <i>?channelId?</i> <i>string</i></code><br>
+      <br>
+      <code>pwd</code><br>
+    </section>
+
+    <section>
+      <h3>r</h3>
+      <code>read ?-nonewline? <i>channelId</i></code><br>
+      <code>read <i>channelId</i> <i>numChars</i></code><br>
+      <br>
+      <div>
+        <code>regexp <i>?<span class="tooltip">switches</span>?</i> <i>exp</i> <i>string</i> <i>?matchVar?</i> <i>?subMatchVar …?</i></code>
+        <div class="tooltiptext" id="regexp">where <i>switch</i> is:
+          <b>-about</b>, <b>-all</b>,
+          <b>-expanded</b>, <b>-indices</b>,
+          <b>-inline</b>, <b>-line</b>,
+          <b>-linestop</b>, <b>-lineanchor</b>,
+          <b>-nocase</b>, <b>-start</b> <i>index</i> or
+          <b>--</b>
+        </div>
+      </div>
+      <br>
+
+      <div>
+        <code>regsub <i>?<span class="tooltip">switches</span>?</i> <i>exp</i> <i>string</i> <i>subSpec</i> <i>?varName?</i></code><br>
+        <div class="tooltiptext" id="regsub">where <i>switch</i> is:
+          <b>-all</b>, <b>-expanded</b>,
+          <b>-line</b>, <b>-linestop</b>,
+          <b>-lineanchor</b>, <b>-nocase</b>,
+          <b>-start</b> <i>index</i> or <b>--</b>
+        </div>
+      </div>
+      <br>
+
+      <code>rename <i>oldName</i> <i>newName</i></code><br>
+      <br>
+      <code>return <i>?result?</i></code><br>
+      <code>return ?-code <i>code</i>? <i>?result?</i></code><br>
+      <code>return <i>?option value …?</i> <i>?result?</i></code>
+    </section>
+
+    <section>
+      <h3>s</h3>
+
+      <code>scan <i>string</i> <i>format</i> <i>?varName …?</i></code><br>
+      <br>
+      <div>
+        <code>seek <i>channelId</i> <i>offset</i> <i>?<span class="tooltip">origin</span>?</i></code><br>
+        <div class="tooltiptext" id="seek">where <i>origin</i> is one of:
+          <b>start</b>, <b>current</b> or <b>end</b>.
+        </div>
+      </div>
+      <br>
+
+      <code>set <i>varName</i> <i>?value?</i></code><br>
+      <br>
+      <div>
+        <code>socket <i>?<span class="tooltip">options</span>?</i> <i>host</i> <i>port</i></code><br>
+        <div class="tooltiptext" id="socket">where <i>option</i> is:
+          <b>-myaddr</b> <i>addr</i>, <b>-myport</b> <i>port</i> or
+          <b>-async</b>
+        </div>
+      </div>
+      <br>
+
+      <div>
+        <code>socket -server <i>command</i> <i>?<span class="tooltip">options</span>?</i> <i>port</i></code><br>
+        <div class="tooltiptext" id="socket-server">where <i>option</i> is <b>-myaddr</b> <i>addr</i>
+        </div>
+      </div>
+      <br>
+      <code>source <i>fileName</i></code><br>
+      <code>source -encoding <i>encodingName</i> <i>fileName</i></code><br>
+      <br>
+
+      <code>split <i>string</i> <i>?splitChars?</i></code><br>
+      <br>
+
+      <code>string cat <i>?string1 …?</i></code><br>
+      <code>string compare ?-nocase? ?-length <i>length</i>? <i>string1</i> <i>string2</i></code><br>
+      <code>string equal ?-nocase? ?-length <i>length</i>? <i>string1</i> <i>string2</i></code><br>
+      <code>string first <i>needleString</i> <i>haystackString</i> <i>?startIndex?</i></code><br>
+      <code>string index <i>string</i> <i>charIndex</i></code><br>
+      <div>
+        <code>string is <i><span class="tooltip">class</span></i> ?-strict? ?-failindex <i>varName</i>? string</code><br>
+        <div class="tooltiptext" id="string-is-class">
+          where <i>class</i> is one of: <b>alnum</b>, <b>alpha</b>, <b>ascii</b>,
+          <b>boolean</b>, <b>control</b>, <b>digit</b>, <b>double</b>,
+          <b>entier</b>, <b>false</b>, <b>graph</b>, <b>integer</b>, <b>list</b>,
+          <b>lower</b>, <b>print</b>, <b>punct</b>, <b>space</b>, <b>true</b>,
+          <b>upper</b>, <b>wideinteger</b>, <b>wordchar</b>, <b>xdigit</b>.
+        </div>
+      </div>
+      <code>string last <i>needleString</i> <i>haystackString</i> <i>?lastIndex?</i></code><br>
+      <code>string length <i>string</i></code><br>
+      <code>string map ?-nocase? <i>mapping</i> <i>string</i></code><br>
+      <code>string match ?-nocase? <i>pattern</i> <i>string</i></code><br>
+      <code>string range <i>string</i> <i>firstIndex</i> <i>lastIndex</i></code><br>
+      <code>string repeat <i>string</i> <i>count</i></code><br>
+      <code>string replace <i>string</i> <i>firstIndex</i> <i>lastIndex</i> <i>?newString?</i></code><br>
+      <code>string reverse <i>string</i></code><br>
+      <code>string tolower <i>string</i> <i>?firstIndex?</i> <i>?lastIndex?</i></code><br>
+      <code>string totitle <i>string</i> <i>?firstIndex?</i> <i>?lastIndex?</i></code><br>
+      <code>string toupper <i>string</i> <i>?firstIndex?</i> <i>?lastIndex?</i></code><br>
+      <code>string trim <i>string</i> <i>?chars?</i></code><br>
+      <code>string trimleft <i>string</i> <i>?chars?</i></code><br>
+      <code>string trimright <i>string</i> <i>?chars?</i></code><br>
+      <br>
+
+      <code>subst ?-nobackslashes? ?-nocommands? ?-novariables? <i>string</i></code><br>
+      <br>
+      <code>switch</code> <i>?options?</i> <i>string</i> <i>pattern</i> <i>body</i> <i>?pattern body …?</i><br>
+      <div>
+        <code>switch</code> <i>?<span class="tooltip">options</span>?</i> <i>string</i> {<i>pattern</i> <i>body</i> ?pattern body …?}<br>
+        <div class="tooltiptext" id="switch">where <i>option</i> is: <b>-exact</b>, <b>-glob</b>,
+          <b>-regexp</b>, <b>-nocase</b>, <b>-matchvar</b> <i>varName</i>,
+          <b>-indexvar</b> <i>varName</i>, <b>--</b>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>t</h3>
+      <code>tailcall <i>command</i> <i>?arg …?</i></code><br>
+      <br>
+      <code>tell <i>channelId</i></code><br>
+      <br>
+      <code>throw <i>type</i> <i>message</i></code><br>
+      <br>
+      <code>time <i>script</i> <i>?count?</i></code><br>
+      <br>
+
+      <code>timerate <i>script</i> <i>?time?</i> <i>?max-count?</i></code><br>
+      <code>timerate ?-direct? ?-overhead <i>double</i>? <i>script</i> <i>?time?</i> <i>?max-count?</i></code><br>
+      <code>timerate ?-calibrate? ?-direct? <i>script</i> <i>script</i> <i>?time?</i> <i>?max-count?</i></code><br>
+      <br>
+
+      <div>
+        <code>trace add command <i>name</i> <i><span class="tooltip">ops</span></i> <i>commandPrefix</i></code><br>
+        <div class="tooltiptext" id="trace-add-command">where <i>op</i> is:
+          <b>rename</b> or <b>delete</b>
+        </div>
+      </div>
+      <div>
+        <code>trace add execution <i>name</i> <i><span class="tooltip">ops</span></i> <i>commandPrefix</i></code><br>
+        <div class="tooltiptext" id="trace-add-execution">where <i>op</i> is:
+          <b>enter</b>,
+          <b>leave</b>,
+          <b>entertep</b> or
+          <b>leavestep</b>
+        </div>
+      </div>
+      <div>
+        <code>trace add variable <i>name</i> <i><span class="tooltip">ops</span></i> <i>commandPrefix</i></code><br>
+        <div class="tooltiptext" id="trace-add-variable">where <i>op</i> is:
+          <b>array</b>,
+          <b>read</b>,
+          <b>write</b> or
+          <b>unset</b>
+        </div>
+      </div>
+      <code>trace remove command <i>name</i> <i>opList</i> <i>commandPrefix</i></code><br>
+      <code>trace remove execution <i>name</i> <i>opList</i> <i>commandPrefix</i></code><br>
+      <code>trace remove variable <i>name</i> <i>opList</i> <i>commandPrefix</i></code><br>
+      <code>trace info command <i>name</i></code><br>
+      <code>trace info execution <i>name</i></code><br>
+      <code>trace info variable <i>name</i></code><br>
+
+      <div>
+        <code>try <i>body</i> <i>?<span class="tooltip">handler</span> …?</i> ?finally <i>script</i>?</code><br>
+        <div class="tooltiptext" id="try">where <i>handler</i> is:
+          <ul>
+            <li><b>on</b> <i>code</i> <i>variableList</i> <i>script</i></li>
+            <li><b>trap</b> <i>pattern</i> <i>variableList</i> <i>script</i></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h3>u</h3>
+
+      <code>unknown <i>cmdName</i> <i>?arg …?</i></code><br>
+      <br>
+
+      <code>unload <i>?swithces?</i> <i>fileName</i></code><br>
+      <code>unload <i>?switches?</i> <i>fileName</i> <i>prefix</i></code><br>
+      <div>
+        <code>unload <i>?<span class="tooltip">switches</span>?</i> <i>fileName</i> <i>prefix</i> <i>interp</i></code><br>
+        <div class="tooltiptext" id="unload">where <i>switch</i> is:
+          <ul>
+            <li><b>-nocomplain</b></li>
+            <li><b>-keeplibrary</b></li>
+            <li><b>--</b></li>
+          </ul>
+        </div>
+      </div>
+      <br>
+
+      <code>unset ?-nocomplain? ?–? <i>?name …?</i></code><br>
+      <br>
+
+      <code>update ?idletasks?</code><br>
+      <br>
+      <code>uplevel <i>?level?</i> <i>arg</i> <i>?arg …?</i></code><br>
+      <br>
+
+      <code>upvar <i>?level?</i> <i>otherVar</i> <i>myVar</i> <i>?otherVar myVar …?</i></code><br>
+
+    </section>
+
+    <section>
+      <h3>v</h3>
+      <code>variable <i>name</i></code><br>
+      <code>variable <i>?name value …?</i></code><br>
+      <br>
+      <code>vwait</code> <i>varName</i>
+    </section>
+
+    <section>
+      <h3>w</h3>
+      <code>while <i>test</i> <i>body</i></code>
+    </section>
+
+    <section>
+      <h3>y</h3>
+      <code>yield <i>?value?</i></code><br>
+      <code>yeildto <i>command</i> <i>?arg …?</i></code><br>
+    </section>
+
+    <section>
+      <h3>z</h3>
+      <code>zlib adler32</code> <i>string</i> <i>?initValue?</i><br>
+      <br>
+      <code>zlib compress</code> <i>string</i> <i>?level?</i><br>
+      <br>
+      <code>zlib crc32</code> <i>string</i> <i>?initValue?</i><br>
+      <br>
+      <code>zlib decompress</code> <i>string</i> <i>?bufferSize?</i><br>
+      <br>
+      <code>zlib deflate</code> <i>string</i> <i>?level?</i><br>
+      <br>
+      <code>zlib gunzip</code> <i>string</i> ?-headerVar <i>varName</i>?<br>
+      <br>
+      <code>zlib gzip</code> <i>string</i> ?-level <i>level</i>? ?-header <i>dict</i>?<br>
+      <br>
+      <code>zlib inflate</code> <i>string</i> <i>?bufferSize?</i><br>
+      <br>
+      <code>zlib push compress</code> <i>channel /?options …?</i><br>
+      <code>zlib push decompress</code> <i>channel</i> <i>?options ..?</i><br>
+      <code>zlib push deflate</code> <i>channel</i> <i>?options …?</i><br>
+      <code>zlib push gunzip</code> <i>channel</i> <i>?options …?</i><br>
+      <code>zlib push gzip</code> <i>channel</i> <i>?options …?</i><br>
+      <code>zlib push inflate</code> <i>channel</i> <i>?options …?</i><br>
+      <br>
+      <code>zlib stream compress</code> ?-dictionary <i>binData</i>? ?-level <i>level</i>?<br>
+      <code>zlib stream decompress</code> ?-dictionary <i>binData</i>?<br>
+      <code>zlib stream deflate</code> ?-dictionary <i>binData</i>? ?-level <i>level</i>?<br>
+      <code>zlib stream gunzip</code><br>
+      <code>zlib stream gzip</code> ?-header <i>header</i>? ?-level <i>level</i>?<br>
+      <code>zlib stream inflate</code> ?-dictionary <i>binData</i>?<br>
+    </section>
+  </body>
+</html>
