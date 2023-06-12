@@ -5,6 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TCL cheatsheet</title>
     <style>
+     body {
+       font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+       font-size: 14px;
+       line-height: 1.42857143;
+       color: #333;
+     }
+     header {
+       margin: 1em;
+     }
+     nav {
+       background-color: #222;
+       color: white;
+       margin: 0;
+       top: 0;
+       border-width: 0 0 1px;
+       position: fixed;
+       right: 0;
+       left: 0;
+       z-index: 2;
+     }
+     nav ul {
+       list-style: none;
+       // text-align: center;
+     }
+     nav > ul > li {
+       color: white;
+       display: inline;
+       margin: 0.5em;
+     }
+     nav > ul > li > a {
+       text-decoration: none;
+       color: #9d9d9d;
+       background-color: transparent;
+     }
+     nav > ul > li > a:hover {
+       color: white;
+     }
+     h1 {
+       text-align: center;
+       margin-top: 2em;
+     }
      .where {
        padding-left: 3em;
        font-size: 5px;
@@ -76,48 +117,21 @@
     </script>
   </head>
   <body onload="onload();">
+    <nav>
+      <ul>
+        <li><a href="#syntax">Syntax</a></li>
+        <li><a href="#data-structures">Data structures</a></li>
+        <li><a href="#predefined-variables">Predefined variables</a></li>
+        <li><a href="#predefined-channels">Predefined channels</a></li>
+        <li><a href="#commands">Commands</a>
+        </li>
+      </ul>
+    </nav>
+
     <header>
       <h1>TCL cheatsheet</h1>
     </header>
-    <nav>
-      <h2>Table of Contents</h2>
-      <div id="text-table-of-contents" role="doc-toc">
-        <ul>
-          <li><a href="#syntax">Syntax</a></li>
-          <li><a href="#data-structures">Data structures</a>
-            <ul>
-              <li><a href="#predefined-variables">Predefined variables</a></li>
-              <li><a href="#predefined-channels">Predefined channels</a></li>
-            </ul>
-          </li>
-          <li><a href="#commands">Commands</a>
-            <p>
-              <a href="#a">a</a>
-              <a href="#b">b</a>
-              <a href="#c">c</a>
-              <a href="#d">d</a>
-              <a href="#e">e</a>
-              <a href="#f">f</a>
-              <a href="#g">g</a>
-              <a href="#i">i</a>
-              <a href="#j">j</a>
-              <a href="#l">l</a>
-              <a href="#n">n</a>
-              <a href="#o">o</a>
-              <a href="#p">p</a>
-              <a href="#r">r</a>
-              <a href="#s">s</a>
-              <a href="#t">t</a>
-              <a href="#u">u</a>
-              <a href="#v">v</a>
-              <a href="#w">w</a>
-              <a href="#y">y</a>
-              <a href="#z">z</a>
-            </p>
-          </li>
-        </ul>
-      </div>
-    </nav>
+
     <section>
       <h2 id="syntax">Syntax</h2>
       <ol>
@@ -153,118 +167,133 @@
       </div>
 
       <h3 id="predefined-variables">Predefined variables</h3>
-      <p>
-        <div class="tooltip">argc</div>,
-        <span class="tooltiptext" id="argc">The number of arguments to tclsh or wish.</span>
 
-        <div class="tooltip">argv</div>,
-        <span class="tooltiptext" id="argv">Tcl list of arguments to tclsh or wish.</span>
+      <div class="tooltip">argc</div>,
+      <span class="tooltiptext" id="argc">The number of arguments to tclsh or wish.</span>
 
-        <div class="tooltip">argv0</div>,
-        <span class="tooltiptext" id="argv0">The script that tclsh or wish started executing
-          (if it  was specified) or otherwise the name by which tclsh or wish was invoked.
-        </span>
+      <div class="tooltip">argv</div>,
+      <span class="tooltiptext" id="argv">Tcl list of arguments to tclsh or wish.</span>
 
-        <div class="tooltip">auto_path</div>,
-        <span class="tooltiptext" id="auth_path">If set,  then it must  contain a valid Tcl
-          list giving directories  to  search   during  auto-load  operations
-        </span>
-        <br>
+      <div class="tooltip">argv0</div>,
+      <span class="tooltiptext" id="argv0">The script that tclsh or wish started executing
+        (if it  was specified) or otherwise the name by which tclsh or wish was invoked.
+      </span>
 
-        <div class="tooltip">env</div>,
-        <span class="tooltiptext" id="env">Array whose elements are the environment variables
-          for the process.
-        </span>
-        <div class="tooltip">errorCode</div>,
-        <span class="tooltiptext" id="erorrCode">This variable holds the value of
-          the -errorcode return option set by the most recent error that occurred in
-          this interpreter.
-        </span>
-        <div class="tooltip">errorInfo</div>,
-        <span class="tooltiptext" id="errorInfo">This variable holds the  value of the
-          -errorinfo return option set  by the most  recent error that  occurred in
-          this interpreter.
-        </span>
-        <br>
+      <div class="tooltip">auto_path</div>,
+      <span class="tooltiptext" id="auth_path">If set,  then it must  contain a valid Tcl
+        list giving directories  to  search   during  auto-load  operations
+      </span>
+      <br>
 
-        <div class="tooltip">tcl_interactive</div>,
-        <span class="tooltiptext" id="tcl_interactive">Contains 1  if tclsh or wish
-          is running interactively (no  script  was specified  and  standard  input is  a
-          terminal-like device), 0 otherwise.
-        </span>
-        <div class="tooltip">tcl_library</div>,
-        <span class="tooltiptext" id="tcl_library">This variable holds the  name of
-          a directory containing the system library  of Tcl scripts, such  as those used
-          for  auto-loading.
-        </span>
-        <div class="tooltip">tcl_nonwordchars</div>,
-        <span class="tooltiptext" id="tcl_nonwordchars">The value of this variable is a
-          regular expression that can be set to  control what are considered ``non-word''
-          characters,  for instances  like  selecting  a word  by
-          double-clicking  in   text  in  Tk.
-        </span>
-        <div class="tooltip">tcl_patchLevel</div>,
-        <span class="tooltiptext" id="tcl_patchLevel">When  an interpreter
-          is created  Tcl initializes  this
-          variable  to hold  a  string giving  the current  patch
-          level  for Tcl,  such as  8.4.16 for  Tcl 8.4  with the
-          first sixteen official patches,  or 8.5b3 for the third
-          beta release of Tcl 8.5.  The value of this variable is
-          returned by the info patchlevel command.
-        </span>
-        <div class="tooltip">tcl_pkgPath</div>,
-        <span class="tooltiptext" id="tcl_pkgPath">This variable  holds a
-          list of  directories indicating where packages are normally  installed.
-        </span>
-        <div class="tooltip">tcl_platform</div>,
-        <span class="tooltiptext" id="tcl_platform">This  is an  associative
-          array  whose elements  contain
-          information about the platform on which the application
-          is running, such  as the name of  the operating system,
-          its   current  release   number,   and  the   machine's
-          instruction set.
-        </span>
-        <div class="tooltip">tcl_precision</div>,
-        <span class="tooltiptext" id="tcl_precision">This variable controls the
-          number of digits to generate
-          when converting  floating-point values to  strings.  It
-          defaults  to 0.   Applications should  not change  this
-          value;  it is  provided for  compatibility with  legacy
-          code.
-        </span>
-        <div class="tooltip">tcl_rcFileName</div>,
-        <span class="tooltiptext" id="tcl_rcFileName"> This variable is used
-          during initialization to indicate
-          the name of a user-specific startup file.
-        </span>
-        <div class="tooltip">tcl_wordchars</div>,
-        <span class="tooltiptext" id="tcl_wordchars">The value of this
-          variable is a regular expression that
-          can  be set  to  control what  are considered  ``word''
-          characters,  for instances  like  selecting  a word  by
-          double-clicking  in   text  in  Tk.
-        </span>
-        <div class="tooltip">tcl_version</div>.
-        <span class="tooltiptext" id="tcl_version">
-          When  an interpreter  is created  Tcl initializes  this
-          variable to hold the version number for this version of
-          Tcl  in the  form x.y.
-        </span>
-        </dl>
-      </p>
+      <div class="tooltip">env</div>,
+      <span class="tooltiptext" id="env">Array whose elements are the environment variables
+        for the process.
+      </span>
+      <div class="tooltip">errorCode</div>,
+      <span class="tooltiptext" id="erorrCode">This variable holds the value of
+        the -errorcode return option set by the most recent error that occurred in
+        this interpreter.
+      </span>
+      <div class="tooltip">errorInfo</div>,
+      <span class="tooltiptext" id="errorInfo">This variable holds the  value of the
+        -errorinfo return option set  by the most  recent error that  occurred in
+        this interpreter.
+      </span>
+      <br>
+
+      <div class="tooltip">tcl_interactive</div>,
+      <span class="tooltiptext" id="tcl_interactive">Contains 1  if tclsh or wish
+        is running interactively (no  script  was specified  and  standard  input is  a
+        terminal-like device), 0 otherwise.
+      </span>
+      <div class="tooltip">tcl_library</div>,
+      <span class="tooltiptext" id="tcl_library">This variable holds the  name of
+        a directory containing the system library  of Tcl scripts, such  as those used
+        for  auto-loading.
+      </span>
+      <div class="tooltip">tcl_nonwordchars</div>,
+      <span class="tooltiptext" id="tcl_nonwordchars">The value of this variable is a
+        regular expression that can be set to  control what are considered ``non-word''
+        characters,  for instances  like  selecting  a word  by
+        double-clicking  in   text  in  Tk.
+      </span>
+      <div class="tooltip">tcl_patchLevel</div>,
+      <span class="tooltiptext" id="tcl_patchLevel">When  an interpreter
+        is created  Tcl initializes  this
+        variable  to hold  a  string giving  the current  patch
+        level  for Tcl,  such as  8.4.16 for  Tcl 8.4  with the
+        first sixteen official patches,  or 8.5b3 for the third
+        beta release of Tcl 8.5.  The value of this variable is
+        returned by the info patchlevel command.
+      </span>
+      <div class="tooltip">tcl_pkgPath</div>,
+      <span class="tooltiptext" id="tcl_pkgPath">This variable  holds a
+        list of  directories indicating where packages are normally  installed.
+      </span>
+      <div class="tooltip">tcl_platform</div>,
+      <span class="tooltiptext" id="tcl_platform">This  is an  associative
+        array  whose elements  contain
+        information about the platform on which the application
+        is running, such  as the name of  the operating system,
+        its   current  release   number,   and  the   machine's
+        instruction set.
+      </span>
+      <div class="tooltip">tcl_precision</div>,
+      <span class="tooltiptext" id="tcl_precision">This variable controls the
+        number of digits to generate
+        when converting  floating-point values to  strings.  It
+        defaults  to 0.   Applications should  not change  this
+        value;  it is  provided for  compatibility with  legacy
+        code.
+      </span>
+      <div class="tooltip">tcl_rcFileName</div>,
+      <span class="tooltiptext" id="tcl_rcFileName"> This variable is used
+        during initialization to indicate
+        the name of a user-specific startup file.
+      </span>
+      <div class="tooltip">tcl_wordchars</div>,
+      <span class="tooltiptext" id="tcl_wordchars">The value of this
+        variable is a regular expression that
+        can  be set  to  control what  are considered  ``word''
+        characters,  for instances  like  selecting  a word  by
+        double-clicking  in   text  in  Tk.
+      </span>
+      <div class="tooltip">tcl_version</div>.
+      <span class="tooltiptext" id="tcl_version">
+        When  an interpreter  is created  Tcl initializes  this
+        variable to hold the version number for this version of
+        Tcl  in the  form x.y.
+      </span>
 
       <h3 id="predefined-channels">Predefined channels</h3>
-      <div>
-        <ul>
-          <li>stdin</li>
-          <li>stdout</li>
-          <li>stderr</li>
-        </ul>
-      </div>
+      <p>stdin, stdout, stderr</p>
     </section>
 
     <section>
-      <h2>Commands</h2>
+      <h2 id="commands">Commands</h2>
+      <p>
+        <a href="#a">a</a>
+        <a href="#b">b</a>
+        <a href="#c">c</a>
+        <a href="#d">d</a>
+        <a href="#e">e</a>
+        <a href="#f">f</a>
+        <a href="#g">g</a>
+        <a href="#i">i</a>
+        <a href="#j">j</a>
+        <a href="#l">l</a>
+        <a href="#n">n</a>
+        <a href="#o">o</a>
+        <a href="#p">p</a>
+        <a href="#r">r</a>
+        <a href="#s">s</a>
+        <a href="#t">t</a>
+        <a href="#u">u</a>
+        <a href="#v">v</a>
+        <a href="#w">w</a>
+        <a href="#y">y</a>
+        <a href="#z">z</a>
+      </p>
 
       <h3>Convensions:</h3>
       <dl>
