@@ -35,26 +35,41 @@
      }
     </style>
     <script>
-     function showTooltip(name) {
-       var i = document.getElementById(name);
-       i.style.visibility='visible';
-       i.onclick = function(){ i.style.visibility='hidden';}
-       i.onmouseleave = function(){ i.style.visibility='hidden';}
+     var isTouchScreen = (('ontouchstart' in window) || navigator.msMaxTouchPoints > 0);
+
+     var tooltip = null;
+     var tooltipText = null;
+
+     function showTooltip(e) {
+       if (tooltip !== null) {
+         tooltipText.style.visibility = 'hidden';
+       }
+       tooltip = e.currentTarget;
+       if (tooltip !== null) {
+         tooltipText = document.getElementById(e.currentTarget.tooltiptext);
+         tooltipText.style.visibility='visible';
+
+         if (isTouchScreen) {
+           tooltip.onclick = function(){ tooltipText.style.visibility='hidden';}
+         } else {
+           tooltip.onmouseleave = function(){ tooltipText.style.visibility='hidden';}
+         }
+       }
      }
 
      function onload() {
        var tooltips = document.getElementsByClassName("tooltip");
-       var tooltiptexts = document.getElementsByClassName("tooltiptext");
-       if (tooltips.length != tooltiptexts.length) {
-         console.log("# tooltip != # tooltiptext")
+       var tooltipTexts = document.getElementsByClassName("tooltiptext");
+       if (tooltips.length != tooltipTexts.length) {
+         console.log("# tooltip != # tooltipText")
        } else {
          for(var i = 0; i < tooltips.length; i++) {
-           console.log(tooltips[i], tooltiptexts[i].id);
-           tooltips[i].tooltiptext = tooltiptexts[i].id;
-           tooltips[i].onmouseover = function(e) {
-             showTooltip(e.currentTarget.tooltiptext)
-           };
-
+           tooltips[i].tooltiptext = tooltipTexts[i].id;
+           if (isTouchScreen) {
+             tooltips[i].onclick = showTooltip;
+           } else {
+             tooltips[i].onmouseover = showTooltip;
+           }
          }
        }
      }
@@ -68,43 +83,43 @@
       <h2>Table of Contents</h2>
       <div id="text-table-of-contents" role="doc-toc">
         <ul>
-          <li><a href="#org5b31c08">Syntax</a></li>
-          <li><a href="#org90d51f2">Data structures</a>
+          <li><a href="#syntax">Syntax</a></li>
+          <li><a href="#data-structures">Data structures</a>
             <ul>
-              <li><a href="#orgf280142">Predefined variables</a></li>
-              <li><a href="#orgc52ff1a">Predefined channels</a></li>
+              <li><a href="#predefined-variables">Predefined variables</a></li>
+              <li><a href="#predefined-channels">Predefined channels</a></li>
             </ul>
           </li>
-          <li><a href="#org8c2f924">Commands</a>
+          <li><a href="#commands">Commands</a>
             <p>
-              <a href="#orgdfd1dd7">a</a>
-              <a href="#org4b14e52">b</a>
-              <a href="#orgbc752c2">c</a>
-              <a href="#orgcc285f4">d</a>
-              <a href="#org5d78f90">e</a>
-              <a href="#orga07ca24">f</a>
-              <a href="#org1c938b6">g</a>
-              <a href="#org567f1cb">i</a>
-              <a href="#org990b50a">j</a>
-              <a href="#orgc9d11f0">l</a>
-              <a href="#org030f75d">n</a>
-              <a href="#org3bea7c7">o</a>
-              <a href="#org9c1a3dc">p</a>
-              <a href="#org4b7c126">r</a>
-              <a href="#org3188cf3">s</a>
-              <a href="#org28eab88">t</a>
-              <a href="#org06be1bd">u</a>
-              <a href="#org771cecf">v</a>
-              <a href="#orge65c5e9">w</a>
-              <a href="#org464d8cb">y</a>
-              <a href="#org974090f">z</a>
+              <a href="#a">a</a>
+              <a href="#b">b</a>
+              <a href="#c">c</a>
+              <a href="#d">d</a>
+              <a href="#e">e</a>
+              <a href="#f">f</a>
+              <a href="#g">g</a>
+              <a href="#i">i</a>
+              <a href="#j">j</a>
+              <a href="#l">l</a>
+              <a href="#n">n</a>
+              <a href="#o">o</a>
+              <a href="#p">p</a>
+              <a href="#r">r</a>
+              <a href="#s">s</a>
+              <a href="#t">t</a>
+              <a href="#u">u</a>
+              <a href="#v">v</a>
+              <a href="#w">w</a>
+              <a href="#y">y</a>
+              <a href="#z">z</a>
             </p>
           </li>
         </ul>
       </div>
     </nav>
     <section>
-      <h2>Syntax</h2>
+      <h2 id="syntax">Syntax</h2>
       <ol>
         <li>Commands</li>
         <li>Evaluation</li>
@@ -127,7 +142,7 @@
     </section>
 
     <section>
-      <h2>Data structures</h2>
+      <h2 id="data-structures">Data structures</h2>
       <div>
         <ul>
           <li>Scalar variable</li>
@@ -137,32 +152,108 @@
         </ul>
       </div>
 
-      <h3>Predefined variables</h3>
-      <div>
-        <ul>
-          <li>argc</li>
-          <li>argv</li>
-          <li>argv0</li>
-          <li>auto_path</li>
-          <li>env</li>
-          <li>errorCode</li>
-          <li>errorInfo</li>
-          <li>tcl_interactive</li>
-          <li>tcl_library</li>
-          <li>tcl_nonwordchars</li>
-          <li>tcl_patchLevel</li>
-          <li>tcl_pkgPath</li>
-          <li>tcl_platform</li>
-          <li>tcl_precision</li>
-          <li>tcl_rcFileName</li>
-          <li>tcl_traceCompile</li>
-          <li>tcl_traceExec</li>
-          <li>tcl_wordchars</li>
-          <li>tcl_version</li>
-        </ul>
-      </div>
+      <h3 id="predefined-variables">Predefined variables</h3>
+      <p>
+        <div class="tooltip">argc</div>,
+        <span class="tooltiptext" id="argc">The number of arguments to tclsh or wish.</span>
 
-      <h3>Predefined channels</h3>
+        <div class="tooltip">argv</div>,
+        <span class="tooltiptext" id="argv">Tcl list of arguments to tclsh or wish.</span>
+
+        <div class="tooltip">argv0</div>,
+        <span class="tooltiptext" id="argv0">The script that tclsh or wish started executing
+          (if it  was specified) or otherwise the name by which tclsh or wish was invoked.
+        </span>
+
+        <div class="tooltip">auto_path</div>,
+        <span class="tooltiptext" id="auth_path">If set,  then it must  contain a valid Tcl
+          list giving directories  to  search   during  auto-load  operations
+        </span>
+        <br>
+
+        <div class="tooltip">env</div>,
+        <span class="tooltiptext" id="env">Array whose elements are the environment variables
+          for the process.
+        </span>
+        <div class="tooltip">errorCode</div>,
+        <span class="tooltiptext" id="erorrCode">This variable holds the value of
+          the -errorcode return option set by the most recent error that occurred in
+          this interpreter.
+        </span>
+        <div class="tooltip">errorInfo</div>,
+        <span class="tooltiptext" id="errorInfo">This variable holds the  value of the
+          -errorinfo return option set  by the most  recent error that  occurred in
+          this interpreter.
+        </span>
+        <br>
+
+        <div class="tooltip">tcl_interactive</div>,
+        <span class="tooltiptext" id="tcl_interactive">Contains 1  if tclsh or wish
+          is running interactively (no  script  was specified  and  standard  input is  a
+          terminal-like device), 0 otherwise.
+        </span>
+        <div class="tooltip">tcl_library</div>,
+        <span class="tooltiptext" id="tcl_library">This variable holds the  name of
+          a directory containing the system library  of Tcl scripts, such  as those used
+          for  auto-loading.
+        </span>
+        <div class="tooltip">tcl_nonwordchars</div>,
+        <span class="tooltiptext" id="tcl_nonwordchars">The value of this variable is a
+          regular expression that can be set to  control what are considered ``non-word''
+          characters,  for instances  like  selecting  a word  by
+          double-clicking  in   text  in  Tk.
+        </span>
+        <div class="tooltip">tcl_patchLevel</div>,
+        <span class="tooltiptext" id="tcl_patchLevel">When  an interpreter
+          is created  Tcl initializes  this
+          variable  to hold  a  string giving  the current  patch
+          level  for Tcl,  such as  8.4.16 for  Tcl 8.4  with the
+          first sixteen official patches,  or 8.5b3 for the third
+          beta release of Tcl 8.5.  The value of this variable is
+          returned by the info patchlevel command.
+        </span>
+        <div class="tooltip">tcl_pkgPath</div>,
+        <span class="tooltiptext" id="tcl_pkgPath">This variable  holds a
+          list of  directories indicating where packages are normally  installed.
+        </span>
+        <div class="tooltip">tcl_platform</div>,
+        <span class="tooltiptext" id="tcl_platform">This  is an  associative
+          array  whose elements  contain
+          information about the platform on which the application
+          is running, such  as the name of  the operating system,
+          its   current  release   number,   and  the   machine's
+          instruction set.
+        </span>
+        <div class="tooltip">tcl_precision</div>,
+        <span class="tooltiptext" id="tcl_precision">This variable controls the
+          number of digits to generate
+          when converting  floating-point values to  strings.  It
+          defaults  to 0.   Applications should  not change  this
+          value;  it is  provided for  compatibility with  legacy
+          code.
+        </span>
+        <div class="tooltip">tcl_rcFileName</div>,
+        <span class="tooltiptext" id="tcl_rcFileName"> This variable is used
+          during initialization to indicate
+          the name of a user-specific startup file.
+        </span>
+        <div class="tooltip">tcl_wordchars</div>,
+        <span class="tooltiptext" id="tcl_wordchars">The value of this
+          variable is a regular expression that
+          can  be set  to  control what  are considered  ``word''
+          characters,  for instances  like  selecting  a word  by
+          double-clicking  in   text  in  Tk.
+        </span>
+        <div class="tooltip">tcl_version</div>.
+        <span class="tooltiptext" id="tcl_version">
+          When  an interpreter  is created  Tcl initializes  this
+          variable to hold the version number for this version of
+          Tcl  in the  form x.y.
+        </span>
+        </dl>
+      </p>
+
+      <h3 id="predefined-channels">Predefined channels</h3>
       <div>
         <ul>
           <li>stdin</li>
@@ -183,7 +274,7 @@
         <dd>see description of <b>string match</b></dd>
       </dl>
 
-      <h3>a</h3>
+      <h3 id="a">a</h3>
 
       <code>after <i>ms</i></code><br>
       <code>after <i>ms</i> <i>script</i> …</code><br>
@@ -219,7 +310,7 @@
     </section>
 
     <section>
-      <h3>b</h3>
+      <h3 id="b">b</h3>
 
       <code>binary decode <i>format</i> <i>?-option value …?</i> <i>data</i></code><br>
       <code>binary encode <i>format</i> <i>?-option value …</i> <i>data</i></code><br>
@@ -230,7 +321,7 @@
     </section>
 
     <section>
-      <h3>c</h3>
+      <h3 id="c">c</h3>
 
       <code>catch <i>script</i> <i>?resultVarName?</i> <i>?optionsVarName?</i></code><br>
       <br>
@@ -358,7 +449,7 @@
     </section>
 
     <section>
-      <h3>d</h3>
+      <h3 id="d">d</h3>
 
       <code>dict append <i>dictionaryVariable</i> <i>key</i> <i>?string …?</i></code><br>
       <code>dict create <i>?key value …?</i></code><br>
@@ -385,7 +476,7 @@
     </section>
 
     <section>
-      <h3>e</h3>
+      <h3 id="e">e</h3>
 
       <code>encoding convertfrom <i>?encoding?</i> <i>data</i></code><br>
       <code>encoding convertto</code> <i>?encoding?</i> <i>string</i></code><br>
@@ -419,7 +510,7 @@
     </section>
 
     <section>
-      <h3>f</h3>
+      <h3 id="f">f</h3>
       <code>fblocked <i>channelId</i></code><br>
       <br>
       <code>fconfigure <i>channelId</i></code><br>
@@ -486,7 +577,7 @@
     </section>
 
     <section>
-      <h3>g</h3>
+      <h3 id="g">g</h3>
       <code>gets <i>channelId</i> <i>?varName?</i></code><br>
       <br>
       <code>glob <i>?switches?</i> <i>?pattern …?</i></code><br>
@@ -495,7 +586,7 @@
     </section>
 
     <section>
-      <h3>i</h3>
+      <h3 id="i">i</h3>
       <code>if <i>expr1</i> ?then? <i>body1</i></code><br>
       <code>if <i>expr1</i> ?then? <i>body1</i> ?else? <i>body2</i></code><br>
       <code>if <i>expr1</i> ?then? <i>body1</i> elseif <i>expr2</i> ?then? <i>body2</i></code><br>
@@ -589,13 +680,13 @@
     </section>
 
     <section>
-      <h3>j</h3>
+      <h3 id="j">j</h3>
 
       <code>join <i>list</i> <i>?joinString?</i></code>
     </section>
 
     <section>
-      <h3>l</h3>
+      <h3 id="l">l</h3>
       <code>lassign <i>list</i> <i>?varName …?</i></code><br>
       <br>
       <code>lindex <i>list</i> <i>index</i> <i>?element …?</i></code><br>
@@ -646,7 +737,7 @@
     </section>
 
     <section>
-      <h3>n</h3>
+      <h3 id="n">n</h3>
       <code>namespace children <i>?namespace?</i> <i>?pattern?</i></code><br>
       <code>namespace code <i>script</i></code><br>
       <code>namespace current</code><br>
@@ -671,14 +762,14 @@
     </section>
 
     <section>
-      <h3>o</h3>
+      <h3 id="o">o</h3>
       <code>open <i>fileName</i></code><br>
       <code>open <i>fileName</i> <i>access</i></code><br>
       <code>open <i>fileName</i> <i>access</i> <i>premissions</i></code><br>
     </section>
 
     <section>
-      <h3>p</h3>
+      <h3 id="p">p</h3>
       <code>package forget <i>?package …?</i></code><br>
       <code>package ifneeded <i>package /version</i> <i>?script?</i></code><br>
       <code>package names</code><br>
@@ -703,7 +794,7 @@
     </section>
 
     <section>
-      <h3>r</h3>
+      <h3 id="r">r</h3>
       <code>read ?-nonewline? <i>channelId</i></code><br>
       <code>read <i>channelId</i> <i>numChars</i></code><br>
       <br>
@@ -739,7 +830,7 @@
     </section>
 
     <section>
-      <h3>s</h3>
+      <h3 id="s">s</h3>
 
       <code>scan <i>string</i> <i>format</i> <i>?varName …?</i></code><br>
       <br>
@@ -819,7 +910,7 @@
     </section>
 
     <section>
-      <h3>t</h3>
+      <h3 id="t">t</h3>
       <code>tailcall <i>command</i> <i>?arg …?</i></code><br>
       <br>
       <code>tell <i>channelId</i></code><br>
@@ -877,7 +968,7 @@
     </section>
 
     <section>
-      <h3>u</h3>
+      <h3 id="u">u</h3>
 
       <code>unknown <i>cmdName</i> <i>?arg …?</i></code><br>
       <br>
@@ -909,7 +1000,7 @@
     </section>
 
     <section>
-      <h3>v</h3>
+      <h3 id="v">v</h3>
       <code>variable <i>name</i></code><br>
       <code>variable <i>?name value …?</i></code><br>
       <br>
@@ -917,18 +1008,18 @@
     </section>
 
     <section>
-      <h3>w</h3>
+      <h3 id="w">w</h3>
       <code>while <i>test</i> <i>body</i></code>
     </section>
 
     <section>
-      <h3>y</h3>
+      <h3 id="y">y</h3>
       <code>yield <i>?value?</i></code><br>
       <code>yeildto <i>command</i> <i>?arg …?</i></code><br>
     </section>
 
     <section>
-      <h3>z</h3>
+      <h3 id="z">z</h3>
       <code>zlib adler32</code> <i>string</i> <i>?initValue?</i><br>
       <br>
       <code>zlib compress</code> <i>string</i> <i>?level?</i><br>
