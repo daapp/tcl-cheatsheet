@@ -363,7 +363,7 @@
       <code>chan blocked <i>channelId</i></code><br>
       <code>chan close <i>channelId</i> <i>?direction?</i></code><br>
       <div>
-        <code>chan configure <i>channelId</i> <i>?<span class="tooltip">-option</span>?</i> <i>value</i> …</code><br>
+        <code>chan configure <i>channelId</i> <i>?<span class="tooltip">-option</span> </i> <i>value</i> …?</code><br>
         <div class="tooltiptext" id="chan-configure">where <i>-option</i>:
           <ul>
             <li><code>-blocking <i>boolean</i></code></li>
@@ -526,11 +526,7 @@
       <div>
         <code>exec <i>?<span class="tooltip">switches</span>?</i> <i>arg</i> <i>?arg …?</i> ?&amp;?</code><br>
         <div class="tooltiptext" id="exec">where <i>switch</i>:
-          <ul>
-            <li><b>-ignorestderr</b></li>
-            <li><b>-keepnewline</b></li>
-            <li><b>--</b></li>
-          </ul>
+          <b>-ignorestderr</b>, <b>-keepnewline</b> or <b>--</b>.
         </div>
       </div>
       <br>
@@ -547,8 +543,34 @@
       <code>fblocked <i>channelId</i></code><br>
       <br>
       <code>fconfigure <i>channelId</i></code><br>
-      <code>fconfigure <i>channelId</i> <i>name</i></code><br>
-      <code>fconfigure <i>channelId</i> <i>name</i> <i>value</i> <i>?name value …?</i></code><br>
+      <code>fconfigure <i>channelId</i> <i>-option</i></code><br>
+      <div>
+        <code>fconfigure <i>channelId</i> <i>?<span class="tooltip">-option</span> </i> <i>value</i> …?</code><br>
+        <div class="tooltiptext" id="fconfigure">where <i>-option</i>:
+          <ul>
+            <li><code>-blocking <i>boolean</i></code></li>
+            <li>
+              <div>
+                <code>-buffering <i>newValue</i></code>
+                <div class="where">where <i>newValue</i> is one of: <b>full</b>, <b>line</b> or <b>none</b>
+                </div>
+              </div>
+            </li>
+            <li><code>-buffersize <i>newSize</i></code></li>
+            <li><code>-encoding <i>name</i></code></li>
+            <li><code>-eofchar <i>char</i></code></li>
+            <li><code>-eofchar <i>{inChar outChar}</i></code></li>
+            <li>
+              <div>
+                <code>-translation <i>mode</i></code>code>
+                <div class="where">where <i>mode</i> is one of: <b>auto</b>, <b>binary</b>, <b>cr</b>, <b>crlf</b> or <b>lf</b>
+                </div>
+              </div>
+            </li>
+            <li><code>-translation {<i>inMode outMode</i>}</code></li>
+          </ul>
+        </div>
+      </div>
       <br>
 
       <code>fcopy <i>inChan</i> <i>outChan</i> ?-size <i>size</i>? ?-command <i>callback</i>?</code><br>
@@ -1011,11 +1033,7 @@
       <div>
         <code>unload <i>?<span class="tooltip">switches</span>?</i> <i>fileName</i> <i>prefix</i> <i>interp</i></code><br>
         <div class="tooltiptext" id="unload">where <i>switch</i> is:
-          <ul>
-            <li><b>-nocomplain</b></li>
-            <li><b>-keeplibrary</b></li>
-            <li><b>--</b></li>
-          </ul>
+          <b>-nocomplain</b></li>, <b>-keeplibrary</b> or <b>--</b>.
         </div>
       </div>
       <br>
