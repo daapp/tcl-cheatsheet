@@ -57,10 +57,6 @@
        text-align: center;
        margin-top: 2em;
      }
-     h3 {
-       padding-top: 3em;
-
-     }
      .where {
        padding-left: 3em;
        font-size: 10px;
@@ -128,11 +124,17 @@
            }
          }
        }
+       const titleHeight = document.getElementById("navbar").getBoundingClientRect().height;
+       document.getElementById("title").style.marginTop = titleHeight + 'px';
+       const h3s = document.getElementsByTagName('h3');
+       for (let h3 of h3s) {
+         h3.style.paddingTop = titleHeight + 'px';
+       }
      }
     </script>
   </head>
   <body onload="onload();">
-    <nav>
+    <nav id="navbar">
       <ul>
         <li><a href="#syntax">Syntax</a></li>
         <li><a href="#data-structures">Data structures</a></li>
@@ -165,7 +167,7 @@
     </nav>
 
     <header>
-      <h1>TCL cheatsheet</h1>
+      <h1 id="title">TCL cheatsheet</h1>
     </header>
 
     <section>
